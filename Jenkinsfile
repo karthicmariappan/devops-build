@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_USER = "karthickm13799"
-        APP_NAME    = "dev"
+        DOCKER_USER = "karthickm13799"      // your Docker Hub username
+        APP_NAME    = "devops-build"
         TARGET      = "dev"
         VERSION     = "v1"
         REPO        = "${DOCKER_USER}/${TARGET}"
@@ -26,7 +26,11 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
                     sh '''
                       echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                       docker push $IMAGE
